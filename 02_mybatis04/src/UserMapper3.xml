@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zhang.mappers.UserMapper2">
+
+<select id="findAll" resultType="cn.zhang.domain.User">
+	select * from user 
+</select>
+
+<select id="select1" parameterType="string" resultType="User">
+	select * from user where id=#{id}
+</select>
+
+<select id="select2" parameterType="int" resultType="User">
+	select * from user where age=#{age}
+</select>
+
+<!--参数只能传递一个，要么是基础数据类型，要么是domainbean，要么是map
+此种传多值，需要封装到domainbean中或者map中
+ <select id="select3" parameterType="string,int" resultType="User">
+	select * from user where id=#{id} and age=#{age}
+</select> -->
+
+<select id="select4" parameterType="User" resultType="User">
+	select * from user where username=#{username} and age=#{age}
+</select>
+
+<select id="select5" parameterType="map" resultType="User">
+	select * from user where username=#{username} and age=#{userage}
+</select>
+
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="db.properties">
+		<!-- <property name="" value=""/>可设置属性 -->
+	</properties>
+	<!-- <settings>
+		<setting name="" value=""/>
+	</settings> 效率低下，一般不用-->
+	<typeAliases>
+		<!-- 单独起别名，别名可以任意指定，如obj，a，good等，一般使用类名 -->
+		<typeAlias type="cn.zhang.domain.User" alias="User"/>
+		<!-- 批量起别名，为某个包下的所有类其别名，别名不需要设置，别名为类名或者类名首字母小写
+			实际当中类名可以不要求大小写，如sTuDenT也是可以得，但是一般不建议使用
+			批量起别名使用更广泛
+		 -->
+		<package name="cn.zhang.domain"/>		
+	</typeAliases>
+	<environments default="development">
+		<environment id="development">
+		<transactionManager type="JDBC"/>
+		<dataSource type="POOLED">
+			<property name="driver" value="${driver}"/>
+			<property name="url" value="${url}"/>
+			<property name="username" value="${username}"/>
+			<property name="password" value="${password}"/>
+		</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!-- 单个注册 ,映射文件可以在任意位置-->
+		<!-- <mapper resource="UserMapper3.xml"/> -->
+		
+		<!-- 绑定注册java类 class指明的类/接口和映射文件绑定了才行
+			可使用class注册绑定的映射文件，或注解-->
+		<mapper class="cn.zhang.mappers.UserMapper2"/>
+		
+		<!-- 批量注册映射文件 -->
+		<!-- <package name="cn.zhang.mappers"/> --><!-- 批量注册的映射文件必须绑定了接口 -->
+	</mappers>
+</configuration>

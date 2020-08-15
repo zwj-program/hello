@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zhang.mappers.UserMapper2">
+
+<select id="findAll" resultType="cn.zhang.domain.User">
+	select * from user 
+</select>
+
+<select id="select1" parameterType="string" resultType="User">
+	select * from user where id=#{id}
+</select>
+
+<select id="select2" parameterType="int" resultType="User">
+	select * from user where age=#{age}
+</select>
+
+<!--参数只能传递一个，要么是基础数据类型，要么是domainbean，要么是map
+此种传多值，需要封装到domainbean中或者map中
+ <select id="select3" parameterType="string,int" resultType="User">
+	select * from user where id=#{id} and age=#{age}
+</select> -->
+
+<select id="select4" parameterType="User" resultType="User">
+	select * from user where username=#{username} and age=#{age}
+</select>
+
+<select id="select5" parameterType="map" resultType="User">
+	select * from user where username=#{username} and age=#{userage}
+</select>
+
+<select id="select6" resultType="User">
+	select * from user where id='${id}' <!-- 现在也可，就是name和value皆可-->
+	<!-- select * from user where id='${value}' -->
+	<!-- select * from user where age=${age} -->
+</select>
+
+<select id="select7" resultType="User">
+	select * from user where username like '%${value}%'
+</select>
+
+<select id="select8" resultType="User">
+	select * from user where username like '${namename}'
+</select>
+
+<select id="select9" resultType="User">
+	select * from user where username like '%' #{username} '%'
+</select>
+
+<select id="select10" resultType="String">
+	select * from user where id=#{id}
+</select>
+
+<select id="select11" resultType="string">
+	select * from user
+</select>
+
+<select id="select12" resultType="int">
+	select count(*) from user
+</select>
+
+<select id="select13" resultType="HashMap">
+	select * from user
+</select>
+
+<select id="select14" resultType="Map">
+	select age,count(*) as count from user group by age
+</select>
+<!-- alias to mapping the column and property -->
+<select id="select15" resultType="UnUser">
+	select id,username name,password as pwd,age from user
+</select>
+
+<!-- resultMap属性指明引用的map映射 -->
+<select id="select16" resultMap="userMap">
+	select * from user
+</select>
+<resultMap type="UnUser" id="userMap">
+	<!-- 映射主键字段 -->
+	<id column="id" property="id"/>
+	<!-- 映射普通字段 -->
+	<result column="username" property="name"/>
+	<result column="password" property="pwd"/>
+	<result column="age" property="age"/>
+</resultMap>
+
+<select id="select17" parameterType="User" resultType="User">
+	select * from user
+	<where>
+		<!-- 双引号内的字符串使用单引号，单引号内的字符串使用转义的双引号 -->
+		<!-- <if test="username!=null and username!=''"> -->
+		<if test="username!=null and username!=&quot;&quot;">
+			and username like '%' #{username} '%'
+		</if>
+		<if test="age &gt;0 and age &lt;10000">
+			and age &lt;= #{age}
+		</if>
+	</where>
+</select>
+
+<select id="select18" resultType="User">
+	select * from user where id in
+	<foreach collection="array" item="id" open="(" close=")" separator=",">
+		#{id}
+	</foreach>
+</select>
+
+<sql id="sqlone">
+	select * from user
+</sql>
+<select id="select19" resultType="User">
+	<include refid="sqlone"/> where id=#{id}
+</select>
+
+<select id="select20" resultType="map">
+	select u.username uname,p.name as pname
+	from user u join project p on u.projectId=p.id
+</select>
+
+<select id="select21" resultType="cn.zhang.vo.User_Project">
+	select u.id uid,u.username uname,u.password,
+	u.age,p.id pid,p.name pname
+	from user u join project p on u.projectid=p.id
+</select>
+
+<select id="select22" resultMap="UserProject">
+	select u.*,p.id pid,p.name
+	from user u join project p on u.projectid=p.id
+</select>
+<resultMap type="cn.zhang.vo.User_Project2" id="UserProject">
+	<association property="user" javaType="User" autoMapping="true"/>
+	<association property="project" javaType="Project" autoMapping="true">
+		<result property="pname" column="name"/>
+	</association>
+</resultMap>
+
+<select id="select23" resultMap="UserProject">
+	select u.*,p.id pid,p.name
+	from user u join project p on u.projectid=p.id where username like '%' #{username} '%'
+</select>
+</mapper>
